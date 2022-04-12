@@ -74,3 +74,15 @@ Use this function to an HTMLElement should it shown and hidden in a navigation s
   * Default: false
   * Hide content of top level linkContainer when the user clicks a sub link in the content of the linkContainer.
   * Sub links are defined by subLinkQuery.
+### Example
+```javascript
+if( navMenu = document.getElementById('primary-panel-nav') ) {
+  navMenu.showHideNav({ 
+    linkQuery: 'ul > li > a',
+    showOnHover: false,
+    hideOnOffClick: true,
+    subLinkQuery: 'A',
+    hideOnSublinkClick: true
+  });
+}
+```
