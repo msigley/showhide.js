@@ -46,7 +46,7 @@ Use this function to indicate an HTMLElement should be shown and hidden.
   * Default: function( linkContainer, event ) {}
   * Function to execute at the begining of the hideContent function of linkContainer.
 ### Example
-```
+```javascript
 if( elementToShowHide = document.getElementById('show-hide') ) {
    elementToShowHide.showHide({ 
      showText: 'Show Content',
@@ -54,4 +54,23 @@ if( elementToShowHide = document.getElementById('show-hide') ) {
    });
 }
 ```
-
+## Element.prototype.showHideNav( object args )
+Use this function to an HTMLElement should it shown and hidden in a navigation style.
+### Arguements
+* linkQuery (string)
+  * Default: 'A'
+  * CSS selector string to use to indicate the top level links of the naviation.
+  * Links should be inside containers that contain sub level links of the naviation. 
+* showOnHover (boolean)
+  * Default: true
+  * Show content of top level linkContainers when the mouse is hovered onto them.
+* hideOnOffClick (boolean)
+  * Default: true
+  * Hide content of top level linkContainer when the user clicks outside of the linkContainer.
+* subLinkQuery (string)
+  * Default: ''
+  * CSS selector string to use to indicate sub links in the content of top level linkContainers.
+* hideOnSubLinkClick (boolean)
+  * Default: false
+  * Hide content of top level linkContainer when the user clicks a sub link in the content of the linkContainer.
+  * Sub links are defined by subLinkQuery.
