@@ -9,6 +9,7 @@ A small library for show and hiding elements written in Vanilla JS
 
 # Functions
 ## Element.prototype.showHide( object args )
+Use this function to indicate an HTMLElement should be shown and hidden.
 ### Arguements
 * linkContainer (HTMLElement)
   * Default: this
@@ -44,4 +45,13 @@ A small library for show and hiding elements written in Vanilla JS
 * onHide (function)
   * Default: function( linkContainer, event ) {}
   * Function to execute at the begining of the hideContent function of linkContainer.
+### Example
+```
+if( elementToShowHide = document.getElementById('show-hide') ) {
+   elementToShowHide.showHide({ 
+     showText: 'Show Content',
+     hideText: 'Hide Content'
+   });
+}
+```
 
