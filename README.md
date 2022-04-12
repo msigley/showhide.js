@@ -3,9 +3,9 @@ A small library for show and hiding elements written in Vanilla JS
 
 # Features
 * Uses M height calculation to allow the links or buttons used to show/hide the content to be inside of the parent container.
-** Uses a ResizeObserver and animation frames to recalculate the M height on window resize.
+  * Uses a ResizeObserver and animation frames to recalculate the M height on window resize.
 * Doesn't hide content using display: none.
-** This prevents layout issues from hiding content.
+  * This prevents layout issues from hiding content.
 
 # Functions
 ## Element.prototype.showHide( object args )
