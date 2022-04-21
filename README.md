@@ -42,9 +42,14 @@ Use this function to indicate an HTMLElement should be shown and hidden.
 * onShow (function)
   * Default: function( linkContainer, event ) {}
   * Function to execute at the begining of the showContent function of linkContainer.
+  * Return false to prevent the content of linkContainer from being shown.
+* onShowScroll (function)
+  * Default: function( linkContainer, event ) {}
+  * Function to override the scroll into view behavior when the content of linkContainer is shown.
 * onHide (function)
   * Default: function( linkContainer, event ) {}
   * Function to execute at the begining of the hideContent function of linkContainer.
+  * Return false to prevent the content of linkContainer from being hidden.
 ### Example
 ```javascript
 if( elementToShowHide = document.getElementById('show-hide') ) {
