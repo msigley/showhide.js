@@ -1,5 +1,5 @@
 /*
- * showhide.js v1.0.0
+ * showhide.js v1.1.0
  */
 (function() {
 	var mLine = document.createElement( 'span' );
@@ -71,8 +71,10 @@
 		if( this.showHideOptions.state === 'hidden' )
 			return;
 
-		if( this.showHideOptions.onHide )
-			this.showHideOptions.onHide( this, event );
+		if( this.showHideOptions.onHide ) {
+			if( false === this.showHideOptions.onHide( this, event ) )
+				return;
+		}
 
 		for( let child of this.children ) { // Hide elements
 			if( child === this.showHideOptions.linkElement )
@@ -115,8 +117,10 @@
 		if( this.showHideOptions.state === 'shown' )
 			return;
 
-		if( this.showHideOptions.onShow )
-			this.showHideOptions.onShow( this, event );
+		if( this.showHideOptions.onShow ) {
+			if( false === this.showHideOptions.onShow( this, event ) )
+				return;
+		}
 
 		for( let child of this.children ) { // Show elements
 			if( child === this.showHideOptions.linkElement )
@@ -153,21 +157,25 @@
 
 
 		// Scroll Content into view
-		var offsetParent = this.showHideOptions.linkContainer.offsetParent;
-		var linkContainer = this.showHideOptions.linkContainer;
-		var element = linkContainer;
-		while( offsetParent !== null && offsetParent !== document.body ) {
-			offsetParent.scroll( { left: element.offsetLeft, top: element.offsetTop - ( offsetParent.clientHeight / 2 ), behavior: 'auto' } );
-			if( window.getComputedStyle( offsetParent ).position === 'fixed' )
-				break;
+		if( this.showHideOptions.onShowScroll ) {
+			this.showHideOptions.onShowScroll( this, event );
+		} else {
+			var offsetParent = this.showHideOptions.linkContainer.offsetParent;
+			var linkContainer = this.showHideOptions.linkContainer;
+			var element = linkContainer;
+			while( offsetParent !== null && offsetParent !== document.body ) {
+				offsetParent.scroll( { left: element.offsetLeft, top: element.offsetTop - ( offsetParent.clientHeight / 2 ), behavior: 'auto' } );
+				if( window.getComputedStyle( offsetParent ).position === 'fixed' )
+					break;
 
-			element = offsetParent;
-			offsetParent = offsetParent.offsetParent;
-		}
+				element = offsetParent;
+				offsetParent = offsetParent.offsetParent;
+			}
 
-		if( offsetParent === document.body ) {
-			var linkContainerRect = linkContainer.getBoundingClientRect();
-			window.scrollBy( { left: linkContainerRect.left, top: linkContainerRect.top - ( window.innerHeight / 2 ), behavior: 'auto' } );
+			if( offsetParent === document.body ) {
+				var linkContainerRect = linkContainer.getBoundingClientRect();
+				window.scrollBy( { left: linkContainerRect.left, top: linkContainerRect.top - ( window.innerHeight / 2 ), behavior: 'auto' } );
+			}
 		}
 	};
 
@@ -179,7 +187,7 @@
 				var target = this;
 				document.addEventListener( 'DOMContentLoaded', function() {
 					target.showHide( args );
-				} );
+				}, true );
 				this.showHideLoadedEvent = true;
 			}
 			return;
@@ -199,6 +207,7 @@
 			subLinkQuery: false,
 			hideOnSublinkClick: false,
 			onShow: false,
+			onShowScroll: false,
 			onHide: false 
 		};
 		Object.assign( this.showHideOptions, args );
@@ -279,7 +288,7 @@
 					document.addEventListener( 'click', hideOnOffClickListener, true );
 				}
 			} else {
-				target.hideContent();
+				target.hideContent( e );
 			}
 		};
 		this.showHideOptions.linkElement.addEventListener( 'click', clickListener );
@@ -320,7 +329,9 @@
 			showOnHover: true,
 			hideOnOffClick: true,
 			subLinkQuery: false,
-			hideOnSublinkClick: false
+			hideOnSublinkClick: false,
+			onShow: function() { console.log( 'onShow' ) },
+			onHide: function() { console.log( 'onHide' ) }
 		};
 		Object.assign( this.showHideNavOptions, args );
 
@@ -353,8 +364,8 @@
 				hideOnOffClick: this.showHideNavOptions.hideOnOffClick,
 				subLinkQuery: this.showHideNavOptions.subLinkQuery,
 				hideOnSublinkClick: this.showHideNavOptions.hideOnSublinkClick,
-				onShow: function() { console.log( 'onShow' ) },
-				onHide: function() { console.log( 'onHide' ) }
+				onShow: this.showHideNavOptions.onShow,
+				onHide: this.showHideNavOptions.onHide
 			};
 
 			linkElement.parentElement.showHide( showHideArgs );
