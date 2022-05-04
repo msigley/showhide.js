@@ -1,5 +1,5 @@
 /*
- * showhide.js v1.1.0
+ * showhide.js v1.2.1
  */
 (function() {
 	var mLine = document.createElement( 'span' );
@@ -102,9 +102,9 @@
 		this.showHideOptions.linkElement.classList.remove( 'shown' );
 		this.showHideOptions.linkElement.classList.add( 'notshown' );
 
-		if( this.showHideOptions.showText )
-			this.showHideOptions.linkElement.textContent = this.showHideOptions.showText;
-		else {
+		if( this.showHideOptions.showText ) {
+			this.showHideOptions.linkTextNode.textContent = this.showHideOptions.showText;
+		} else {
 			if( resizeObserver )
 				resizeObserver.unobserve( this );
 			this.showHideOptions.linkElement.remove();
@@ -145,9 +145,9 @@
 		this.showHideOptions.linkElement.classList.remove( 'notshown' );
 		this.showHideOptions.linkElement.classList.add( 'shown' );
 
-		if( this.showHideOptions.hideText )
-			this.showHideOptions.linkElement.textContent = this.showHideOptions.hideText;
-		else {
+		if( this.showHideOptions.hideText ) {
+			this.showHideOptions.linkTextNode.textContent = this.showHideOptions.hideText;
+		} else {
 			if( resizeObserver )
 				resizeObserver.unobserve( this );
 			this.showHideOptions.linkElement.remove();
@@ -217,6 +217,19 @@
 			this.showHideOptions.linkElement.classList.add( 'showHideText' );
 		}
 
+		this.showHideOptions.linkTextNode = null;
+		for( let childNode of this.showHideOptions.linkElement.childNodes ) {
+			if( childNode.nodeType === Node.TEXT_NODE ) {
+				this.showHideOptions.linkTextNode = childNode;
+				break;
+			}
+		}
+
+		if( this.showHideOptions.linkTextNode === null ) {
+			this.showHideOptions.linkTextNode = document.createTextNode('');
+			this.showHideOptions.linkElement.appendChild( this.showHideOptions.linkTextNode );
+		}
+
 		for( let extraElement of this.showHideOptions.extraElements )
 			extraElement.showHideParent = this;
 
@@ -265,9 +278,12 @@
 		// Add click event for showing and hiding the content
 		var clickListener = function( e ) {
 			e.preventDefault();
-			var target = e.target.parentElement;
-			if( null === target.showHideOptions )
+			let target = e.target.parentElement;
+			let i = 0;
+			while( !target.showHideOptions && i < 3 ) {
 				target = target.parentElement;
+				i++;
+			}
 
 			var showHideOptions = target.showHideOptions;
 			if( showHideOptions.state && showHideOptions.state === 'hidden' ) {
